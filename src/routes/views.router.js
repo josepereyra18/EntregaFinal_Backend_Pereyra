@@ -12,10 +12,19 @@ router.get('/register', isNotAuthenticated,(req, res) => {
     res.render('register')
 });
 
+router.get('/reestablecimientoCont', (req, res) => {
+    res.render('verificacionMail')
+})
+
+
+router.get('/reestablecimientoCont/verificado', (req, res) => { 
+    res.render('resCont')
+})
+
 router.get('/current', isAuthenticated ,async(req, res) => {
     try {
 
-        const first_name = req.session.user.first_name;
+        // const first_name = req.session.user.first_name;
         const limit = req.query.limit ? parseInt(req.query.limit) : 10;
         const page = req.query.page ? parseInt(req.query.page) : 1;
         const category = req.query.category;
@@ -50,7 +59,8 @@ router.get('/current', isAuthenticated ,async(req, res) => {
             return res.status(404).send('Página no encontrada');
         }
 
-        res.render('home', { productos: result.docs , first_name: first_name});
+        console.log(req.session.user);
+        res.render('home', { productos: result.docs , user: req.session.user, isAdmin: req.session.user.isAdmin });
     } catch (error) {
         console.error(error);
         res.status(500).send('Error al obtener los productos');

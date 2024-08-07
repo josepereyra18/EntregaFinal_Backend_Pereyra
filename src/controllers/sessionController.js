@@ -15,7 +15,8 @@ export const login = async (req, res) => {
                 last_name: req.user.last_name,
                 email: req.user.email,
                 age: req.user.age,
-                cartId: req.user.cartId
+                cartId: req.user.cartId,
+                isAdmin: req.user.isAdmin
                };
             res.redirect('/current')
         } catch(error) {

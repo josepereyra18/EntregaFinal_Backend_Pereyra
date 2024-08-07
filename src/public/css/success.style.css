@@ -1,0 +1,28 @@
+.container{
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.textDenied{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 30px;
+}
+.mensaje{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    padding: 60px;
+}
+
+.message{
+    color: rgb(161, 161, 161);
+}

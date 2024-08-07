@@ -1,73 +1,65 @@
-import {cartsService,usersService} from "../repository/index.js";
-import { createHash, isValidPassword } from '../utils.js';
-import usersDTO from '../dao/DTOs/user.dto.js';
+import { usersService, cartsService } from "../service/index.js";
+import usersDTO from "../dao/DTOs/user.dto.js";
+import { createHash } from "../utils.js";
 
-class AuthController {
-    async register(req, username, password, done) {
-        const { first_name, last_name, age, email } = req.body;
-        try {
-            let newUser;
-            let user = await usersService.findUser(username);
-            if (user) {
-                console.log("El usuario ya existe");
-                return done(null, false);
-            }
-
-            let passwordHash = createHash(password);
-            let userDto = new usersDTO(first_name, last_name, email, passwordHash, age);
-
-            if (!userDto.isAdmin) {
-                let cart = await cartsService.createCart({});
-                newUser = { ...userDto, cartId: cart._id };
-                let result = await usersService.createUser(newUser);
-                cart.userId = result._id;
-                await cartsService.updateCart(cart._id, cart);
-                return done(null, result);
-            }
-
-            let result = await usersService.createUser(newUser);
-            return done(null, result);
-        } catch (error) {
-            return done("Error al registrar el usuario: " + error);
-        }
-    }
-
-    async login(username, password, done) {
-        try {
-            const user = await usersService.findUser(username);
-            if (!user) {
-                console.log("Usuario no encontrado");
-                return done(null, false);
-            }
-            if (!isValidPassword(user, password)) {
-                return done(null, false);
-            }
-
-            return done(null, user);
-        } catch (error) {
-            return done("Error al obtener el usuario: " + error);
-        }
-    }
-
-    async githubCallback(accessToken, refreshToken, profile, done) {
-        try {
-            console.log(profile);
-            let user = await usersService.findUser(profile._json.email);
-
-            if (!user) {
-                let username = profile._json.name;
-                let email = profile._json.email;
-
-                let newUser = new usersDTO(username, "", email, "", 18);
-                let result = await usersService.createUser(newUser);
-                done(null, result);
-            } else {
-                done(null, user);
-            }
-        } catch (error) {
-            return done(error);
-        }
+export const getUsers = async (req, res) => {
+    try{
+        let users = await usersService.getUsers();
+        res.send({result: "success", payload: users});
+    }catch(error){
+        console.log(error);
     }
 }
 
-export default new AuthController()
+export const getUserById = async (req, res) => {
+    try{
+        let id = req.params.id;
+        let user = await usersService.findUserById(id);
+        res.send({result: "success", payload: user});
+    }catch(error){
+        console.log(error);
+    }
+}
+
+export const createUser = async (req, res) => {
+    let newUser;
+    let result
+    try{
+        let user = req.body;
+        let userdto = new usersDTO(user.first_name, user.last_name, user.email, user.password, user.age);
+        let hashedPassword = createHash(user.password);
+        userdto.password = hashedPassword;
+
+        if (!userdto.isAdmin) {
+            let cart = await cartsService.createCart({});
+            newUser = { ...userdto, cartId: cart._id };
+            result = await usersService.createUser(newUser);
+            cart.userId = result._id;
+            await cartsService.updateCart(cart._id, cart);
+            res.send({result: "success", payload: result});
+            return;
+        }
+        result = await usersService.createUser(userdto);
+        res.send({result: "success", payload: result});
+    }catch(error){
+        console.log(error);
+    }
+}
+
+export const userToAdmin = async (req, res) => {
+    try{
+        let id = req.params.id;
+        let user = await usersService.findUserById(id);
+        if (user.isAdmin){
+            user.isAdmin = false;
+        }else{
+            user.isAdmin = true;
+        }
+
+        let updatedUser = await usersService.updateUser(id, user);
+        res.send({result: "success", payload: user});
+
+    }catch(error){
+        console.log(error);
+    }
+}

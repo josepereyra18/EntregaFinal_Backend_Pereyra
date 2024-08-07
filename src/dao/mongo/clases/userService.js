@@ -4,6 +4,11 @@ export default class Users{
 
     }
 
+    getUsers = async () => {
+            let result = await User.find();
+            return result
+    }
+
     findUser = async (username) => {
             let result = await User.findOne({ email: username });
             return result
@@ -19,5 +24,9 @@ export default class Users{
             return result
     }
 
+    updateUser = async (id, user) => {
+            let result = await User.findByIdAndUpdate(id, user);
+            return result
+    }
 
 }

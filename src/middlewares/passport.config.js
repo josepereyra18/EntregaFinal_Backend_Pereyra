@@ -1,8 +1,8 @@
 import passport from 'passport';
 import local from 'passport-local';
 import GitHubStrategy from 'passport-github2';
-import AuthController from '../controllers/userController.js';
-import { usersService } from '../repository/index.js';
+import AuthController from '../controllers/authController.js';
+import { usersService } from '../service/index.js';
 const LocalStrategy = local.Strategy;
 
 const initializepassport = () => {

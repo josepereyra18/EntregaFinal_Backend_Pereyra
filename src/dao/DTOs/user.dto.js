@@ -10,7 +10,7 @@ export default class usersDTO {
     }
         
     verifyIsAdmin(){
-        if (this.email === "admin@coder.com" && this.password === "Cod3r123"){
+        if (this.email==="admin@coder.com" && this.password==="Cod3r123"){
             return true
         }else{
             return false

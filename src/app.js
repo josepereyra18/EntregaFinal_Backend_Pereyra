@@ -22,6 +22,8 @@ import passport from 'passport';
 import initializepassport from './middlewares/passport.config.js';
 import sharedSession from 'express-socket.io-session';
 import productsDto from './dao/DTOs/products.dto.js';
+import ressCon from './routes/api/reesCont.js'
+import userRoute from './routes/api/users.route.js'
 
 const app = express();
 
@@ -46,12 +48,13 @@ socketServer.use(sharedSession(sessionMiddleware, {
 mongoose.connect(process.env.MONGO_URL).then(
     () => {console.log('Conectado a la base de datos')}).catch(error => console.log("error en la conexion ", error))
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-
-app.engine('handlebars', handlebars.engine({
-  handlebars: allowInsecurePrototypeAccess(Handlebars)
+app.engine('handlebars',handlebars.engine({
+    helpers: {
+        isTrue: function(value, options) {
+            return value ? options.fn(this) : options.inverse(this);
+        }
+    },
+    handlebars: allowInsecurePrototypeAccess(Handlebars),
 }));
 
 
@@ -63,12 +66,16 @@ app.use(passport.session());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
 app.use(express.static(__dirname + '/public'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use('/api', productsRouter);
 app.use('/api', cartRouter);
 app.use('/chat', chatRouter)
 app.use('/chat', chatRouter)
 app.use("/realTimeProducts", realTimeProducts )
 app.use('/api/session', sessionRouter);
+app.use('/reestablecimientoCont',ressCon)
+app.use('/api/users', userRoute)
 app.use('/', viewsRouter);
 
 let historialMensajes = await chatModel.find();
@@ -122,7 +129,7 @@ socketServer.on('connection', async socket => {
     })
     // Cuando se agrega un producto
     socket.on('agregarProd', async (product) => {
-        let productdto= new productsDto(product.title, product.description, product.price, product.code, product.stock, product.status, product.category);
+        let productdto= new productsDto(product.title, product.description, product.price, product.code, product.stock, product.category);
         await productsModel.create(productdto);
         productosActualizados();
     })
@@ -137,7 +144,6 @@ socketServer.on('connection', async socket => {
 
     if (session && session.user && session.user.cartId) {
         const cartId = session.user.cartId;
-        console.log('Cart ID de session:', cartId);
         socket.emit('cartId', cartId);
     }
 

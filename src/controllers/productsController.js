@@ -4,7 +4,7 @@ import productsDTO from "../dao/DTOs/products.dto.js"
 // const cartsService = new Carts();
 // const productsService = new Products();
 
-import {cartsService,productsService} from "../repository/index.js";
+import {cartsService,productsService} from "../service/index.js";
 
 
 export const getProducts = async (req, res) =>{

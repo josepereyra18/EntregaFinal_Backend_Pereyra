@@ -3,6 +3,12 @@ export default class usersRepository {
         this.dao = dao;
     }
 
+
+    getUsers = async () => {
+        let result = await this.dao.getUsers();
+        return result;
+    }
+
     findUser = async (username)=>{
         let result = await this.dao.findUser(username);
         return result;
@@ -17,4 +23,10 @@ export default class usersRepository {
         let result = await this.dao.findUserById(id);
         return result
     }
+
+    updateUser = async (id, user) => {
+        let result = await this.dao.updateUser(id, user);
+        return result
+    }
+
 }

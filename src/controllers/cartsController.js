@@ -5,7 +5,7 @@ import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 dotenv.config();
 // r5eeplzsarlo para que se utilice factory 
-import {cartsService,productsService,ticketsService, usersService} from "../repository/index.js";
+import {cartsService,productsService,ticketsService, usersService} from "../service/index.js";
 
 // const cartsService = new Carts();
 // const productsService = new Products();

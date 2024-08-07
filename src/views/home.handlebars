@@ -13,7 +13,7 @@
         <div class="banner">
             <a href="/api/session/logout" class="btn btn-primary">Logout</a>
         </div>
-        <h2 class="titulo">Bienvenido, {{first_name}}</h2>
+        <h2 class="titulo">Bienvenido, {{user.first_name}}</h2>
         <div class= "coco">
             {{#each productos}}
                     <div class="card" style="width: 18rem; height: 13rem;">
@@ -21,7 +21,12 @@
                             <h5 class="card-title">{{this.title}}</h5>
                             <p class="card-text">{{this.description}}</p>
                             <p class="card-text">$ {{this.price}}</p>
-                            <button class="btn btn-primary AgregarAlCarrito" data-product-id="{{this._id}}">Agregar al carrito</button>
+                            {{#isTrue ../user.isAdmin}}
+                                <a href="/api/product/edit/{{this._id}}" class="btn btn-primary">Editar</a>
+                                <a href="/api/product/delete/{{this._id}}" class="btn btn-primary">Eliminar</a>
+                            {{else}}
+                                <button class="btn btn-primary AgregarAlCarrito" data-product-id="{{this._id}}">Agregar al carrito</button>
+                            {{/isTrue}}
                         </div>
                     </div>
             {{/each}}

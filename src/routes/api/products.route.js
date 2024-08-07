@@ -14,4 +14,6 @@ router.put('/products/:id', isAdmin, updateProduct);
 
 router.delete('/products/:id', isAdmin, deleteProduct);
 
+
+
 export default router;
