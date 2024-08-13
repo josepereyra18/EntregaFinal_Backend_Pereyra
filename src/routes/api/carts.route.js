@@ -3,21 +3,21 @@ import { getCarts,getCartbyId,createCart,addProductToCart,updateCart,updateProdu
 import { isUser } from "../../middlewares/isUser.js";
 const router = Router();
 
-router.get('/cart', getCarts); 
+router.get('/cart', getCarts);  
 
-router.get('/cart/:cid',getCartbyId); 
+router.get('/cart/:cid',getCartbyId);  
 
-router.post('/cart', createCart) 
+router.post('/cart', createCart)  
 
-router.post('/cart/:id/product/:pid', isUser ,addProductToCart)
+router.post('/cart/:id/product/:pid', isUser ,addProductToCart) 
 
-router.put ('/carts/:cid',updateCart ) 
+router.put ('/cart/:cid',updateCart )  
 
-router.put('/carts/:cid/products/:pid',updateProductFromCart); 
+router.put('/cart/:id/product/:pid',updateProductFromCart); 
 
-router.delete('/cart/:id/product/:pid', deleteProductFromCart)
+router.delete('/cart/:id/product/:pid', deleteProductFromCart) 
 
-router.delete('/cart/:id', deleteAllProductsFromCart )
+router.delete('/cart/:cid', deleteAllProductsFromCart ) 
 
 router.post('/cart/:cid/purchase', checkoutCart)
 

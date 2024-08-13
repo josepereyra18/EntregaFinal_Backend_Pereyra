@@ -1,14 +1,10 @@
-// import { Carts, Products, Tickets, Users} from "../dao/factory.js";
 import ticketDto from "../dao/DTOs/ticket.dto.js";
 import { v4 as uuidv4 } from 'uuid';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 dotenv.config();
-// r5eeplzsarlo para que se utilice factory 
 import {cartsService,productsService,ticketsService, usersService} from "../service/index.js";
 
-// const cartsService = new Carts();
-// const productsService = new Products();
 
 
 export const getCarts =async (req,res) =>{

@@ -4,11 +4,11 @@ import { isAdmin } from "../../middlewares/isAdmin.js";
 
 const router = Router();
 
-router.get('/products', getProducts); 
+router.get('/products', getProducts);  
 
 router.get('/products/:id', getProductById); 
 
-router.post('/products', isAdmin, createProduct); 
+router.post('/products', isAdmin, createProduct);  
 
 router.put('/products/:id', isAdmin, updateProduct); 
 

@@ -24,6 +24,9 @@ import sharedSession from 'express-socket.io-session';
 import productsDto from './dao/DTOs/products.dto.js';
 import ressCon from './routes/api/reesCont.js'
 import userRoute from './routes/api/users.route.js'
+import swaggerJSDoc from 'swagger-jsdoc';
+import SwaggerUiExpress from 'swagger-ui-express';
+
 
 const app = express();
 
@@ -61,6 +64,22 @@ app.engine('handlebars',handlebars.engine({
 initializepassport();
 app.use(passport.initialize());
 app.use(passport.session());
+
+const swaggerOptions = {
+    definition: {
+        openapi: '3.0.1',
+        info: {
+            title: 'Documentación',
+            description: 'API para el manejo de productos y  carritos',
+
+        },
+
+    },
+    apis :[`src/docs/**/*.yaml`],
+}
+
+const specs = swaggerJSDoc(swaggerOptions);
+app.use("/apidocs", SwaggerUiExpress.serve, SwaggerUiExpress.setup(specs));
 
 
 app.set('views', __dirname + '/views');

@@ -1,8 +1,4 @@
-// import { Carts, Products} from "../dao/factory.js";
 import productsDTO from "../dao/DTOs/products.dto.js"
-// r5eeplzsarlo para que se utilice factory 
-// const cartsService = new Carts();
-// const productsService = new Products();
 
 import {cartsService,productsService} from "../service/index.js";
 
