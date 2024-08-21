@@ -33,8 +33,8 @@ export const getCartbyId =async (req, res) =>{
 
 
 export const createCart = async (req, res) =>{
-    await cartsService.createCart();
-    res.send({result: "success", message: "Carrito creado"});
+    const newCart = await cartsService.createCart();
+    res.send({result: "success", message: "Carrito creado", payload: newCart});
 }
 
 export const addProductToCart = async (req,res) =>{
@@ -69,7 +69,7 @@ export const updateCart = async (req, res)=>{
     let { cid } = req.params;
 
     try{
-        let cart = await cartsService.findCartById(cid); // find cart by id
+        let cart = await cartsService.getCartbyId(cid); // find cart by id
         if (!cart){
             return res.status(404).send({message: "El carrito no existe"});
         }
@@ -90,7 +90,7 @@ export const updateProductFromCart = async (req, res) =>{
     let { quantity } = req.body;
 
     try {
-        let cart = await cartsService.findCartById(cid); // fIND CART BY ID
+        let cart = await cartsService.getCartbyId(cid); // fIND CART BY ID
         if (!cart) {
             return res.status(404).send({ message: "Carrito no encontrado" });
         }

@@ -23,11 +23,11 @@ export const getProductById = async (req, res) =>{
 }
 
 export const createProduct = async (req, res) =>{
-    let { title, description, price, code, stock, status, category } = req.body;
-    if (!title || !description || !price || !code || !stock || !status || !category){
+    let { title, description, price, code, stock, category } = req.body;
+    if (!title || !description || !price || !code || !stock || !category){
         res.send({status: error, message: "Faltan datos"});
     }
-    let prod = new productsDTO(title, description, price, code, stock, status, category);
+    let prod = new productsDTO(title, description, price, code, stock, category);
     let result = await productsService.createProduct(prod);
     res.send ({result: "success", payload: result});
 }

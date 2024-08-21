@@ -8,11 +8,11 @@ router.get('/products', getProducts);
 
 router.get('/products/:id', getProductById); 
 
-router.post('/products', isAdmin, createProduct);  
+router.post('/products', createProduct);  
 
-router.put('/products/:id', isAdmin, updateProduct); 
+router.put('/products/:id',updateProduct); 
 
-router.delete('/products/:id', isAdmin, deleteProduct);
+router.delete('/products/:id', deleteProduct);
 
 
 

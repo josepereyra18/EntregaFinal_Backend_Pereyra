@@ -108,33 +108,33 @@ socketServer.on('connection', async socket => {
 
     // soket Chat
     socket.on('authenticate', (data) => {
-      usuarios.push(socket); 
-      
-      socket.emit('messageLog', historialMensajes);
-      console.log(historialMensajes)
+    usuarios.push(socket); 
+    
+    socket.emit('messageLog', historialMensajes);
+    console.log(historialMensajes)
 
-      usuarios.forEach(client => {
-          if (client !== socket) {
-              client.emit('newUser', data);
-          }
-      });
+    usuarios.forEach(client => {
+        if (client !== socket) {
+            client.emit('newUser', data);
+        }
+    });
     });
 
     socket.on('message', async (data) => {
-      await chatModel.create({user: data.user, message: data.message});
+    await chatModel.create({user: data.user, message: data.message});
 
-      usuarios.forEach(client => {
-          client.emit('message', data);
-      });
-  
+    usuarios.forEach(client => {
+        client.emit('message', data);
+    });
+
     });
 
 
     // soket RealTimeProducts
 
     async function productosActualizados (){
-      const productosActualizados = await productsModel.find() ;
-      socketServer.emit('Lista-Modificada', productosActualizados);
+    const productosActualizados = await productsModel.find() ;
+    socketServer.emit('Lista-Modificada', productosActualizados);
     }
 
     const productos = await productsModel.find();

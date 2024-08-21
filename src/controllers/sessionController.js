@@ -17,17 +17,22 @@ export const login = async (req, res) => {
                 age: req.user.age,
                 cartId: req.user.cartId,
                 isAdmin: req.user.isAdmin
-               };
-            res.redirect('/current')
+                };
+            res.redirect('/current');
         } catch(error) {
             res.status(500).send({message: "Error al buscar el usuario"});
         }
 }
 
+// export const faillogin = async (req, res) => {
+//     console.log("Usuario no encontrado");
+//     res.send({error: "Usuario no encontrado", message: "Usuario no encontrado"});
+// }
+
 export const faillogin = async (req, res) => {
-    console.log("Usuario no encontrado");
-    res.send({error: "Usuario no encontrado"});
-}
+    console.log("Intento de login fallido");
+    res.status(404).send({message: "Usuario no encontrado"});
+};
 
 export const logout = async (req, res) => {
     req.session.destroy((err)=>{
