@@ -79,8 +79,9 @@
         <a class="contraseña" >Olvide mi contraseña </a>
     </div>
     <script> 
+            const apiUrl = window.location.origin;
             document.querySelector('.contraseña').addEventListener('click', function(event) {
-            event.preventDefault(); // Evita que el enlace navegue a otra página
+            event.preventDefault(); 
             Swal.fire({
                 title: 'Ingrese su correo electrónico',
                 input: 'email',
@@ -90,7 +91,7 @@
                 confirmButtonText: 'Enviar',
                 cancelButtonText: 'Cancelar',
                 preConfirm: (email) => {
-                    return fetch('/reestablecimientoCont/lalala', {
+                    return fetch(`${apiUrl}/reestablecimientoCont/lalala`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
