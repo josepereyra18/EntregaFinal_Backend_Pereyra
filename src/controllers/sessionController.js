@@ -23,7 +23,7 @@ export const login = async (req, res) => {
 
             let user = await usersService.findUserById(req.user._id);
             await usersService.updateUser(user._id, {last_connection: new Date()});
-            res.redirect('/current');
+            res.redirect('/');
         } catch(error) {
             res.status(500).send({message: "Error al buscar el usuario"});
         }

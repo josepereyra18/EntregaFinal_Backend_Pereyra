@@ -136,7 +136,16 @@ socketServer.on('connection', async socket => {
     //socket agregar productos al carrito 
     let cart= []
     if (session && session.user && session.user.cartId) {
+        let carrito
         const cartId = session.user.cartId;
+        if (session.cart === undefined){
+            carrito = await cartModel.findOne({_id: cartId});
+            
+        }else{
+            await cartModel.updateOne({_id: cartId}, {products: session.cart});
+            carrito = await cartModel.findOne({_id: cartId});
+        }
+        socket.emit('reestablecerCart', carrito.products);
         socket.emit('cartId', cartId);
     }else{
         socket.emit('cartNoUser', cart);
@@ -153,6 +162,7 @@ socketServer.on('connection', async socket => {
             }else{
                 prod.quantity++;
             }
+            session.cart = cart;
         }else{
                 let carrito = await cartModel.findOne({_id:cartId});
                 if (await cartModel.findOne({_id: cartId , products: {$elemMatch: {product:productId}}})){
@@ -160,7 +170,6 @@ socketServer.on('connection', async socket => {
                 }else{
                     carrito.products.push({product:productId , quantity: 1});
                 }
-                
                 await cartModel.updateOne({_id:cartId}, carrito);
             }
         socket.emit('productoAgregado', producto);

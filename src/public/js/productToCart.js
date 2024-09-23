@@ -18,8 +18,8 @@ let itemCount = 0;
         console.log(`${productId} agregado al carrito`);
       }else{
         itemCount++
-        socket.emit('agregarProducto', productId, carritoId);
         productId = e.target.getAttribute('data-product-id');
+        socket.emit('agregarProducto', productId, carritoId);
         item_count_btn.innerHTML = parseInt(itemCount)
         console.log(`${productId} agregado al carrito`);
       }
@@ -56,6 +56,21 @@ socket.on('cartId', (data) => {
         timer: 3000
     });
     carritoId = data;
+})
+
+
+socket.on('reestablecerCart', (data) => {
+  for(let i = 0; i < data.length; i++){
+    cartContainer.innerHTML += `
+      <div class="card" style=" width: 23rem; background-color: rgb(41, 46, 51);">
+        <div class="card-body" style="width: 23rem;  display: flex; align-items: center; justify-content: space-between;">
+          <h5 class="card-title">${data[i].title}</h5>
+          <p class="card-text">${data[i].price}</p>
+          <p class="card-text">$ ${data[i].quantity}</p>
+        </div>
+      </div> 
+    `
+  }
 })
 
 

@@ -7,7 +7,7 @@
     <title>Login</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    {{!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <header>
     <nav class="navbar fixed-top navbar-expand-lg bg-body-tertiary navbar-dark bg-dark">
@@ -54,11 +54,10 @@
     </nav>
 </header>
 
-
 <body>
     <div class="container">
         <h1 class="titulo">Login</h1>
-        <form action="/api/session/login" method="post" class="form">
+        <form action="/api/session/login" method="post"  >
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Email address</label>
                 <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name= "email" autocomplete="email">
@@ -70,13 +69,58 @@
             </div>
             <button type="submit" class="btn btn-sm btn-outline-secondary">Iniciar Sesión</button>
             <a  href="/api/session/register" class="btn btn-sm btn-outline-success">Registrate</a>
-            <a href="/api/session/github" class="btn btn-sm btn-outline-secondary">Ingresar con Github</a>
+            <a href="/api/session/github" class="btn btn-sm btn-outline-secondary">Github 
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path></svg>
+            </a>
         </form>
         <div>
 
         </div>
-        <a class="contraseña" href="/reestablecimientoCont/lalala">Olvide mi contraseña </a>
-    </div>    
+        <a class="contraseña" >Olvide mi contraseña </a>
+    </div>
+    <script> 
+            document.querySelector('.contraseña').addEventListener('click', function(event) {
+            event.preventDefault(); // Evita que el enlace navegue a otra página
+            Swal.fire({
+                title: 'Ingrese su correo electrónico',
+                input: 'email',
+                inputLabel: 'Correo electrónico',
+                inputPlaceholder: 'Ingrese su correo electrónico',
+                showCancelButton: true,
+                confirmButtonText: 'Enviar',
+                cancelButtonText: 'Cancelar',
+                preConfirm: (email) => {
+                    return fetch('http://localhost:8080/reestablecimientoCont/lalala', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ email: email })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(response.statusText)
+                        }
+                        return response.json()
+                    })
+                    .catch(error => {
+                        Swal.showValidationMessage(
+                            `Request failed: ${error}`
+                        )
+                    })
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Correo enviado',
+                        text: 'Se ha enviado un correo para restablecer su contraseña.',
+                        icon: 'success'
+                    })
+                }
+            })
+        });
+
+    </script>  
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>

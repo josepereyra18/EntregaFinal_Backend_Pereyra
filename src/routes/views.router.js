@@ -15,11 +15,6 @@ router.get('/api/session/register', isNotAuthenticated,(req, res) => {
     res.render('register')
 });
 
-router.get('/reestablecimientoCont', (req, res) => {
-    res.render('verificacionMail')
-})
-
-
 router.get('/reestablecimientoCont/verificado', (req, res) => { 
     res.render('resCont')
 })
