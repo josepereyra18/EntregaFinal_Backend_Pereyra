@@ -3,12 +3,15 @@ const router = express.Router();
 import { isAuthenticated, isNotAuthenticated } from '../middlewares/auth.js';
 import productsModel from '../dao/mongo/models/products.model.js';
 
+router.get('/purchase',isAuthenticated, (req, res) => {
+    res.render('ProcesoDePago')
+})
 
-router.get('/',(req, res) => {
+router.get('/api/session/login',(req, res) => {
     res.render('login')
 });
 
-router.get('/register', isNotAuthenticated,(req, res) => {
+router.get('/api/session/register', isNotAuthenticated,(req, res) => {
     res.render('register')
 });
 
@@ -21,10 +24,13 @@ router.get('/reestablecimientoCont/verificado', (req, res) => {
     res.render('resCont')
 })
 
-router.get('/current', isAuthenticated ,async(req, res) => {
+router.get('/idem', (req, res) => {
+    res.render('deleteModifyUser')
+})
+
+router.get('/', async(req, res) => {
     try {
 
-        // const first_name = req.session.user.first_name;
         const limit = req.query.limit ? parseInt(req.query.limit) : 10;
         const page = req.query.page ? parseInt(req.query.page) : 1;
         const category = req.query.category;
@@ -60,7 +66,12 @@ router.get('/current', isAuthenticated ,async(req, res) => {
         }
 
         console.log(req.session.user);
-        res.render('home', { productos: result.docs , user: req.session.user, isAdmin: req.session.user.isAdmin });
+
+        if (req.session.user != undefined ) {
+            return res.render('home', { productos: result.docs, user: req.session.user, isAdmin: req.session.user.isAdmin });
+        } else {
+            return res.render('home', { productos: result.docs });
+        }
     } catch (error) {
         console.error(error);
         res.status(500).send('Error al obtener los productos');

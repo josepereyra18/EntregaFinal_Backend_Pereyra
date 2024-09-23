@@ -12,18 +12,17 @@ export const verificacionMail = async (req, res) => {
     try{
         let UserExist = await usersService.findUser(email);
         if (!UserExist){
-            return res.status(404).render('deniedResponse', {status:'El mail no esta Registrado',message: "Porfavor registrese primero"});
+            return res.status(404).render('deniedResponse', {status:'El mail no esta Registrado',message: "Porfavor registrese primero", callback: '/reestablecimientoCont/'});
         }
         
         let token = generateToken(email);
-
 
         const transport = nodemailer.createTransport({
             service: 'gmail',
             port:587, 
             auth: {
-              user: process.env.MAIL,
-              pass: process.env.MAIL_PASSWORD
+                user: process.env.MAIL,
+                pass: process.env.MAIL_PASSWORD
             }
         })
 
@@ -41,12 +40,13 @@ export const verificacionMail = async (req, res) => {
         })
 
         req.user = UserExist;
-        res.render('successResponse', {status:'Verificacion Exitosa ',message: "Se ha enviado un mail a tu casilla de correo para reestablecer tu contraseña"});
+        res.send({message:'Se ha enviado un mail a tu casilla de correo para reestablecer tu contraseña'});
+        // res.render('successResponse', {status:'Verificacion Exitosa ',message: "Se ha enviado un mail a tu casilla de correo para reestablecer tu contraseña", callback: '/'});
 
 
     }catch(error){
         console.log(error);
-        res.render('deniedResponse', {status:'Verificacion no Exitosa ',message: "No se puedo enviar el correo electronico para reestablecer tu contraseña,. Poravor Intente más Tarde"});
+        res.render('deniedResponse', {status:'Verificacion no Exitosa ',message: "No se puedo enviar el correo electronico para reestablecer tu contraseña,. Poravor Intente más Tarde", callback: '/'});
     }
 }
 
@@ -62,21 +62,24 @@ export const reestablecerContraseña = async (req, res) => {
         if (!password || !user.password) {
             return res.status(400).render('deniedResponse', {
                 status: 'Datos incompletos',
-                message: 'Por favor, proporciona todos los datos necesarios.'
+                message: 'Por favor, proporciona todos los datos necesarios.', 
+                callback: '/'
             });
         }
 
         if (isValidPassword(user, password)) {
             return res.status(404).render('deniedResponse', {
-                status: 'Contraseña no Cambiada', // uhmmmm...esto se me hace conocido 🤔
-                message: 'No puedes utilizar la misma contraseña.'
+                status: 'Contraseña no Cambiada',
+                message: 'No puedes utilizar la misma contraseña.', 
+                callback: '/'
             });
         }
 
         if (password !== password2) {
             return res.status(404).render('deniedResponse', {
                 status: 'Contraseñas no Coinciden',
-                message: 'Por favor, verifica que las contraseñas coincidan.'
+                message: 'Por favor, verifica que las contraseñas coincidan.', 
+                callback: '/'
             });
         }
 
@@ -84,7 +87,8 @@ export const reestablecerContraseña = async (req, res) => {
         let result = await usersService.updateUser(user._id, user);
         res.render('successResponse', {
             status: 'Reestablecimiento de Contraseña Exitoso',
-            message: 'Tu contraseña ha sido reestablecida con éxito.'
+            message: 'Tu contraseña ha sido reestablecida con éxito.', 
+            callback: '/'
         });
     } catch (error) {
         console.log(error);

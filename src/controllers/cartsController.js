@@ -174,8 +174,8 @@ export const checkoutCart = async (req, res) =>{
             service: 'gmail',
             port:587, 
             auth: {
-              user: process.env.MAIL,
-              pass: process.env.MAIL_PASSWORD
+                user: process.env.MAIL,
+                pass: process.env.MAIL_PASSWORD
             }
         })
 

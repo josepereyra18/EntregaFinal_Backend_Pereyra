@@ -1,10 +1,16 @@
 .container{
     display: flex;
-    flex-direction: column;
     align-items: center;
-    height: 100vh;
-    background-color: #f1f1f1;
+    justify-content: center;
+    flex-direction: column;
 }
+.loginReg{
+    display: flex;
+    align-items: center;
+    justify-content:space-evenly;
+    width: 30vh;
+}
+
 .card{
     margin: 5px;
     align-items:center;
@@ -14,9 +20,7 @@
 .coco{
     display: flex;
     justify-content: center;
-    align-items: start;
-    height: 100vh;
-    padding: 50px;
+    flex-wrap: wrap;
 }
 
 .card-body{
@@ -31,4 +35,52 @@
     width: 300px;
     align-items: center;
     margin: 10px;
+}
+
+.hero{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    /* margin: 10px; */
+    background-attachment: fixed;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../imagenes/imagen5.jpg');
+    background-size:cover;
+    background-blend-mode: darken;
+    background-position-y:center;
+    height: 70vh;
+}
+.texto_hero{
+    color: white;
+    font-size: 30px;
+    text-align: center;
+    margin: 10px;
+}
+
+.titulo_hero{
+    color: white;
+    font-size: 50px;
+    font-weight: bold;
+    text-align: center;
+    margin: 10px;
+}
+
+.titulo{
+    padding: 50px;
+    color: rgb(61, 61, 61);
+    font-size: 30px;
+    text-align: center;
+    margin: 10px;
+}
+
+.bordered-element {
+    border: 1px solid rgb(224, 224, 224); 
+    padding: 5px;  
+    border-radius: 50px; 
+    margin-left: 10px;
+}
+
+.offCanvasStyle{
+    color: rgb(224, 224, 224);
+    
 }

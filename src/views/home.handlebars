@@ -5,35 +5,141 @@
     <link rel="stylesheet" type="text/css" href="css/Home.style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Productos - Home</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
+
+<header>
+    <nav class="navbar fixed-top navbar-expand-lg bg-body-tertiary navbar-dark bg-dark">
+        <div class="container-fluid"  >
+            <span class="navbar-brand mb-0 h1">HLo</span>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="#">Sobre Nosotros</a>
+                </li>
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Productos
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="/?category={{encodeURIComponent 'Star Wars'}}">Star Wars</a></li>
+                    <li><a class="dropdown-item" href="/?category={{encodeURIComponent 'The Eras Tour'}}">Taylor Swift</a></li>
+                </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div>
+            {{#if user.isAdmin}}
+                    <a href="/api/product/create" class="btn btn-outline-danger">Crear Producto</a>
+            {{/if}}
+
+            {{#if user}}
+                <a href="#" class="btn btn-primary">Perfil</a>
+                <div class="banner"></div>
+                    <a href="/api/session/logout" class="btn btn-primary">Logout</a>
+                </div>
+            {{else}}
+                    <a class="btn  btn-sm btn-outline-success me-2" href="/api/session/login" type="button"> Login </a>
+                    <a class="btn btn-sm btn-outline-secondary" href="/api/session/register" type="button">Register</a>
+            {{/if}}
+        </div>
+
+        <button class="btn btn-sm btn-outline-secondary " type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" style="display: flex; margin-left: 10px;">
+            <p id="cartItem" calss="cartItem" style="margin: 0px; color: rgb(224, 224, 224); padding-right: 5px;"></p>
+            <span class="material-icons" style="color: antiquewhite;"> shopping_cart</span>
+        </button>
+
+        <div class="offcanvas offcanvas-start bg-dark" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title offCanvasStyle" id="offcanvasExampleLabel">Offcanvas</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="offCanvasStyle" id="cart" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            </div>
+            
+            <div id="pago-container">
+                
+            </div>
+        </div>
+    </nav>
+</header>
+
 <body>
-    <div class="container">
-        <h1 class="titulo" >Productos</h1>
-        <div class="banner">
-            <a href="/api/session/logout" class="btn btn-primary">Logout</a>
-        </div>
-        <h2 class="titulo">Bienvenido, {{user.first_name}}</h2>
-        <div class= "coco">
-            {{#each productos}}
-                    <div class="card" style="width: 18rem; height: 13rem;">
-                        <div class="card-body">
-                            <h5 class="card-title">{{this.title}}</h5>
-                            <p class="card-text">{{this.description}}</p>
-                            <p class="card-text">$ {{this.price}}</p>
-                            {{#isTrue ../user.isAdmin}}
-                                <a href="/api/product/edit/{{this._id}}" class="btn btn-primary">Editar</a>
-                                <a href="/api/product/delete/{{this._id}}" class="btn btn-primary">Eliminar</a>
-                            {{else}}
-                                <button class="btn btn-primary AgregarAlCarrito" data-product-id="{{this._id}}">Agregar al carrito</button>
-                            {{/isTrue}}
-                        </div>
-                    </div>
-            {{/each}}
-        </div>
+    <section class="hero">
+        <h1 class="titulo_hero">HLo</h1>
+        <p class="texto_hero"> Hacé lo que te hace sentir bien </p>
+    </section>
+    <section>
+        <div class="container">
+
+            {{#if user }}
+
+                <h2 class="titulo">Bienvenido, {{user.first_name}}</h2>
+
+                <div class="coco">
+                    {{#each productos}}
+
+                            <div class="card" style="width: 18rem; height: 13rem;">
+
+                                <div class="card-body">
+
+                                    <h5 class="card-title">{{this.title}}</h5>
+                                    <p class="card-text">{{this.description}}</p>
+                                    <p class="card-text">$ {{this.price}}</p>
+
+                                    {{#isTrue ../user.isAdmin}}
+                                        <a href="/api/product/edit/{{this._id}}" class="btn btn-primary">Editar</a>
+                                        <a href="/api/product/delete/{{this._id}}" class="btn btn-primary">Eliminar</a>
+                                    {{/isTrue}}
+
+                                </div>
+
+                            </div>
+
+                    {{/each}}
+
+                </div>
+
+            {{else}}
+            <h2 class="titulo">Algunas cosas que creemso que te pueden gustar ... </h2>
+            <div class="coco">
+                    {{#each productos}}
+                            <div class="card" style="width: 18rem; height: 13rem;">
+                                
+                                <div class="card-body">
+                                    <h5 class="card-title">{{this.title}}</h5>
+                                    <p class="card-text">{{this.description}}</p>
+                                    <p class="card-text">$ {{this.price}}</p>
+                                    <button class="btn btn-sm btn-outline-secondary AgregarAlCarrito" data-product-id="{{this._id}}">Agregar al carrito</button>
+                                </div>
+
+                            </div>
+                    {{/each}}
+
+                </div>
+
+            {{/if}}
+            
+        </div> 
+    </section> 
+
+    <footer>
+
+    </footer>
+
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="/js/productToCart.js"></script>
+    <script src="../public/js/alerts.js"></script>
 </body>
 </html>

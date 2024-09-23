@@ -6,3 +6,16 @@
     align-items: center;
     height: 100vh;
 }
+
+.form{
+    padding: 30px;
+}
+
+
+.contraseña{
+    color: rgb(33, 37, 41)
+}
+
+.titulo{
+    color: rgb(58, 65, 71)
+}

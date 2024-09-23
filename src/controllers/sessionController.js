@@ -1,3 +1,5 @@
+import { usersService} from "../service/index.js";
+
 export const register = async (req, res) => {
     res.redirect("/")
 }
@@ -18,16 +20,15 @@ export const login = async (req, res) => {
                 cartId: req.user.cartId,
                 isAdmin: req.user.isAdmin
                 };
+
+            let user = await usersService.findUserById(req.user._id);
+            await usersService.updateUser(user._id, {last_connection: new Date()});
             res.redirect('/current');
         } catch(error) {
             res.status(500).send({message: "Error al buscar el usuario"});
         }
 }
 
-// export const faillogin = async (req, res) => {
-//     console.log("Usuario no encontrado");
-//     res.send({error: "Usuario no encontrado", message: "Usuario no encontrado"});
-// }
 
 export const faillogin = async (req, res) => {
     console.log("Intento de login fallido");

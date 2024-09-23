@@ -9,8 +9,9 @@ const userSchema = new mongoose.Schema({
     password: {type: String, required: true},
     age: {type: Number, required: true},
     isAdmin: {type: Boolean, required: true, default: false},
+    last_connection: {type: Date, required: true, default: Date.now},
     cartId: {type: mongoose.Schema.Types.ObjectId, ref: 'cart'}
- });
+});
 
 const userModel = mongoose.model(userCollection, userSchema);
 

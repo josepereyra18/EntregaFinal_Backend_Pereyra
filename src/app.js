@@ -8,7 +8,6 @@ dotenv.config();
 import productsRouter from './routes/api/products.route.js'
 import cartRouter from './routes//api/carts.route.js'
 import realTimeProducts from './routes/api/realTimeProducts.router.js'
-import chatRouter from './routes/api/message.router.js'
 import mongoose from 'mongoose';
 import productsModel from './dao/mongo/models/products.model.js'
 import chatModel from './dao/mongo/models/chat.model.js';
@@ -26,7 +25,6 @@ import ressCon from './routes/api/reesCont.js'
 import userRoute from './routes/api/users.route.js'
 import swaggerJSDoc from 'swagger-jsdoc';
 import SwaggerUiExpress from 'swagger-ui-express';
-
 
 const app = express();
 
@@ -55,6 +53,9 @@ app.engine('handlebars',handlebars.engine({
     helpers: {
         isTrue: function(value, options) {
             return value ? options.fn(this) : options.inverse(this);
+        },
+        encodeURIComponent: function (str) {
+            return encodeURIComponent(str);
         }
     },
     handlebars: allowInsecurePrototypeAccess(Handlebars),
@@ -89,8 +90,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api', productsRouter);
 app.use('/api', cartRouter);
-app.use('/chat', chatRouter)
-app.use('/chat', chatRouter)
 app.use("/realTimeProducts", realTimeProducts )
 app.use('/api/session', sessionRouter);
 app.use('/reestablecimientoCont',ressCon)
@@ -104,31 +103,6 @@ socketServer.on('connection', async socket => {
 
 
     console.log('Un cliente se ha conectado');
-
-
-    // soket Chat
-    socket.on('authenticate', (data) => {
-    usuarios.push(socket); 
-    
-    socket.emit('messageLog', historialMensajes);
-    console.log(historialMensajes)
-
-    usuarios.forEach(client => {
-        if (client !== socket) {
-            client.emit('newUser', data);
-        }
-    });
-    });
-
-    socket.on('message', async (data) => {
-    await chatModel.create({user: data.user, message: data.message});
-
-    usuarios.forEach(client => {
-        client.emit('message', data);
-    });
-
-    });
-
 
     // soket RealTimeProducts
 
@@ -160,25 +134,38 @@ socketServer.on('connection', async socket => {
 
 
     //socket agregar productos al carrito 
-
+    let cart= []
     if (session && session.user && session.user.cartId) {
         const cartId = session.user.cartId;
         socket.emit('cartId', cartId);
+    }else{
+        socket.emit('cartNoUser', cart);
     }
 
 
     socket.on ('agregarProducto', async (productId, cartId) => {
         let producto = await productsModel.findOne({_id:productId});
-        let carrito = await cartModel.findOne({_id:cartId});
-
-        if (await cartModel.findOne({_id: cartId , products: {$elemMatch: {product:productId}}})){
-            carrito.products.find(prod => prod.product.toString() === producto._id.toString()).quantity++;
+        if (cartId === 0){
+            producto.quantity = 1;
+            let prod = cart.find(prod => prod.product.toString() === producto._id.toString())
+            if (prod === undefined){
+                cart.push({product:productId , quantity: 1});
+            }else{
+                prod.quantity++;
+            }
         }else{
-            carrito.products.push({product:productId , quantity: 1});
-        }
-        
-        await cartModel.updateOne({_id:cartId}, carrito);
+                let carrito = await cartModel.findOne({_id:cartId});
+                if (await cartModel.findOne({_id: cartId , products: {$elemMatch: {product:productId}}})){
+                    carrito.products.find(prod => prod.product.toString() === producto._id.toString()).quantity++;
+                }else{
+                    carrito.products.push({product:productId , quantity: 1});
+                }
+                
+                await cartModel.updateOne({_id:cartId}, carrito);
+            }
         socket.emit('productoAgregado', producto);
+        socket.emit('cartNoUser', cart);
     })
     
 })
+
