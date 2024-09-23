@@ -5,12 +5,16 @@ MONGO_URL,
 SECRET_KEY,
 MAIL,
 MAIL_PASSWORD,
-PORT_LIVE
+PORT_LIVE, 
+ADMIN_MAIL,
+ADMIN_PASSWORD
 
 example: 
 PERSISTENCE= MONGO
 MONGO_URL= 'url de mngodb'
-SECRET_KEY='secretkey'
-MAIL= 'johndoe@gmail.com'
+SECRET_KEY='supersecretpassword'
+MAIL= 'johndoe@mail.com'
 MAIL_PASSWORD= 'ahok bqrw jkmt qwka'
 PORT_LIVE = 8080
+ADMIN_MAIL = 'JHONDOEADMIN@MAIL.COM'
+ADMIN_PASSWORD = 'johndoe123'
