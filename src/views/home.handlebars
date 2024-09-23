@@ -112,10 +112,8 @@
                                         <p class="card-text">{{this.description}}</p>
                                         <p class="card-text">$ {{this.price}}</p>
 
-                                        //! Agregar botones de editar y eliminar--------------------------------
-
                                         <a href="/api/product/edit/{{this._id}}" class="btn btn-primary">Editar</a>
-                                        <a href="/api/product/delete/{{this._id}}" class="btn btn-primary">Eliminar</a>
+                                        <a href="/api/delate/products/{{this._id}}" class="btn btn-primary">Eliminar</a>
                                     </div>
                                 </div>
                         {{/each}}
