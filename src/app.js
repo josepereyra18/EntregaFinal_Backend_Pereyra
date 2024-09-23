@@ -1,5 +1,6 @@
 import express from 'express';
 import { deleteProductBack }  from './controllers/productsController.js'
+import cors from 'cors'
 import __dirname from './utils.js';
 import handlebars from 'express-handlebars';
 import viewsRouter from './routes/views.router.js';
@@ -30,6 +31,7 @@ import SwaggerUiExpress from 'swagger-ui-express';
 
 const app = express();
 
+app.use(cors())
 const PORT = process.env.PORT_LIVE;
 const httpServer = app.listen(PORT, console.log(`Server is running on port ${PORT}`));
 const socketServer = new Server(httpServer);
