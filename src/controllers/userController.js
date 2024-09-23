@@ -73,7 +73,7 @@ export const userToAdmin = async (req, res) => {
         }
 
         let updatedUser = await usersService.updateUser(id, user);
-        res.render('successResponse', {status:'Usuario Modificado',message: `el usuario ${updatedUser.first_name} ha sido modificado a ${user.isAdmin ? 'admin' : 'user'}`, callback:'/idem'});
+        res.render('successResponse', {status:'Usuario Modificado',message: `el usuario ${updatedUser.first_name} ha sido modificado a ${user.isAdmin ? 'admin' : 'user'}`, callback:'/AdminMod'});
 
     }catch(error){
         console.log(error);
@@ -125,7 +125,7 @@ export const deleteUser = async (req, res) => {
     try{
         let id = req.body.ID;
         await usersService.deleteUser(id);
-        res.render('successResponse', {status:'Usuario fue eliminado',message: `el usuario con id ${id} ha sido eliminado`, callback:'/idem'});
+        res.render('successResponse', {status:'Usuario fue eliminado',message: `el usuario con id ${id} ha sido eliminado`, callback:'/AdminMod'});
     }catch(error){
         console.log(error);
     }

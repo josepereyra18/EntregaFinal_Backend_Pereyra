@@ -17,7 +17,7 @@ router.put('/cart/:id/product/:pid',updateProductFromCart);
 
 router.delete('/cart/:id/product/:pid', deleteProductFromCart) 
 
-router.delete('/cart/:cid', deleteAllProductsFromCart ) 
+router.delete('/cart/:id', deleteAllProductsFromCart ) 
 
 router.post('/cart/:cid/purchase', checkoutCart)
 

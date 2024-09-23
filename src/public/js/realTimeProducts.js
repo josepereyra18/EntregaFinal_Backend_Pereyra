@@ -57,10 +57,3 @@ socket.on('Lista-Modificada', (productos) => {
         listaProductos.appendChild(productoDiv);
     });
 });
-
-            // <h2>${producto.title}</h2>
-            // <h3>ID: ${producto._id}</h3>
-            // <p>Descripcion: ${producto.description}</p>
-            // <p>Precio: ${producto.price}</p>
-            // <p>Código: ${producto.code}</p>
-            // <p>Stock: ${producto.stock}</p>

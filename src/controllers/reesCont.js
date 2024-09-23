@@ -34,14 +34,13 @@ export const verificacionMail = async (req, res) => {
             <div>
                 <h1> ${UserExist.first_name}, Hemos recibido uintento de cambio de contraseña \n </h1>
                 <h3> Has click en el link de abajo para poder reestablecer tu contraseña \n En caso de que no hayas hecho tal petición, te pedimos que ignores ste mensaje. </h3>
-                <a method="post" href="http://localhost:8080/reestablecimientoCont/verificado/${token}"> Click aquí para reestablecer tu contraseña </a>
+                <a method="post" href="/reestablecimientoCont/verificado/${token}"> Click aquí para reestablecer tu contraseña </a>
                 </div>
             `,
         })
 
         req.user = UserExist;
         res.send({message:'Se ha enviado un mail a tu casilla de correo para reestablecer tu contraseña'});
-        // res.render('successResponse', {status:'Verificacion Exitosa ',message: "Se ha enviado un mail a tu casilla de correo para reestablecer tu contraseña", callback: '/'});
 
 
     }catch(error){

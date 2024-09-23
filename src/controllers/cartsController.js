@@ -24,7 +24,6 @@ export const getCartbyId =async (req, res) =>{
         if (!cart) {
             return res.status(404).send({ message: "Carrito no encontrado" });
         }
-        console.log(JSON.stringify(cart, null, '\t'))
         res.send({result: "success", payload: cart});
     } catch (error) {
         console.log(error);
@@ -69,14 +68,14 @@ export const updateCart = async (req, res)=>{
     let { cid } = req.params;
 
     try{
-        let cart = await cartsService.getCartbyId(cid); // find cart by id
+        let cart = await cartsService.getCartbyId(cid); 
         if (!cart){
             return res.status(404).send({message: "El carrito no existe"});
         }
 
         cart.products = arregloProductos;
 
-        let cartUpdated = await cartsService.updateCart(cid, cart); //update cart
+        let cartUpdated = await cartsService.updateCart(cid, cart); 
         res.send({result: "success", payload: cartUpdated});
     }catch(error){
         console.log(error);
@@ -90,7 +89,7 @@ export const updateProductFromCart = async (req, res) =>{
     let { quantity } = req.body;
 
     try {
-        let cart = await cartsService.getCartbyId(cid); // fIND CART BY ID
+        let cart = await cartsService.getCartbyId(cid); 
         if (!cart) {
             return res.status(404).send({ message: "Carrito no encontrado" });
         }
@@ -100,7 +99,7 @@ export const updateProductFromCart = async (req, res) =>{
         }
         producto.quantity = quantity;
 
-        let cartUpdated = await cartsService.updateCart(cid, cart); //update cart
+        let cartUpdated = await cartsService.updateCart(cid, cart); 
 
         res.send({ result: "success", payload: cartUpdated });
     } catch (error) {
@@ -195,10 +194,8 @@ export const checkoutCart = async (req, res) =>{
                 <h3>Total: $${ticket.amount}</h3>
                 <h4>Gracias por elegirnos!</h4>
             </div>
-            `,
+            `
         })
-
-
         res.send({result: "success", payload: ticket});
 
 
@@ -208,30 +205,55 @@ export const checkoutCart = async (req, res) =>{
     }
 }
 
-
 async function processProducts(carrito) {
-    let productos = [];
-    carrito.products.forEach(async prod => {
+    try{
+        let productos = [];
+        carrito.products.forEach(async prod => {
         let producto = await productsService.getProductById(prod.product._id);
         productos.push({producto, quantity: prod.quantity});
-        // console.log(producto);
     })
     return productos;
+    }catch(error){
+        console.log(error);
+    }
+    
 }
 
-// no se usa
-// export const deleteCart = async (req, res) =>{
-//     let { id } = req.params;
-//     try{
-//         let carrito = await cartsModel.findOne({_id: id});
-//         if (!carrito){
-//             return res.status(404).send({ message: "Carrito no encontrado" });
-//         }
-//         let prodEliminado = await cartsModel.deleteOne({_id: id});
 
-//         res.send({result: "success", payload: prodEliminado});
-//     }catch(error){
-//         console.log(error);
-//         res.send({message: "No se pudo eliminar el carrito"});
-//     }
-// }
+export const delateProductsFromCart= async(prodId)=>{
+    try{
+        let carts = await cartsService.delateProductsFromCart(prodId);
+        console.log(carts)
+        let prod = await productsService.getProductById(prodId);
+        const transport = nodemailer.createTransport({
+            service: 'gmail',
+            port:587, 
+            auth: {
+                user: process.env.MAIL,
+                pass: process.env.MAIL_PASSWORD
+            }
+        })
+        for (let i = 0; i < carts.length; i++){
+            let result = await transport.sendMail({
+                from: process.env.MAIL,
+                to: carts[i].userId.email, 
+                subject: `Modificacion en carrito`,
+                html: `
+                <div>
+                    <h1> Hola ${carts[i].userId.first_name}, uno de los productos que tenias en tu carrito fue eliminado</h1>
+                    <h2>Producto eliminado: ${prodId}</h2>
+                    <h3>${prod.title}</h3>
+                    <h4>${prod.price}</h4>
+                    <h5>Te pedimos dusculpas por las molestas</h3>
+                    <h5> puedes revisar nuestras ofertas en nuestra pagina</h5>
+                    <a> aqui </a>
+                </div>
+                `
+            })
+        }
+    }catch(error){
+        console.log(error);
+    }
+    
+
+}

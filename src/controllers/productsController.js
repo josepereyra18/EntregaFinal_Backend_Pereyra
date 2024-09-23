@@ -1,7 +1,7 @@
 import productsDTO from "../dao/DTOs/products.dto.js"
 
 import {cartsService,productsService} from "../service/index.js";
-
+import{delateProductsFromCart} from "../controllers/cartsController.js";
 
 export const getProducts = async (req, res) =>{
     try{
@@ -45,8 +45,14 @@ export const updateProduct = async (req, res) =>{
 
 export const deleteProduct = async (req, res) =>{
     let { id } = req.params;
-    // await cartModel.updateMany({ products: {_id : id}}, { $pull: { products: {_id : id} } });
-    await cartsService.updateMany(id);
+    await delateProductsFromCart(id);
     let result = await productsService.deleteProduct(id);
     res.send({result: "success", payload: result});
+}
+
+
+export const deleteProductBack = async (id) =>{
+    await delateProductsFromCart(id);
+    let result = await productsService.deleteProduct(id);
+    return result;
 }

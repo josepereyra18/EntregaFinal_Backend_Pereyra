@@ -90,7 +90,7 @@
                 confirmButtonText: 'Enviar',
                 cancelButtonText: 'Cancelar',
                 preConfirm: (email) => {
-                    return fetch('http://localhost:8080/reestablecimientoCont/lalala', {
+                    return fetch('/reestablecimientoCont/lalala', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'

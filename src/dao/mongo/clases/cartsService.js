@@ -14,7 +14,6 @@ export default class Carts {
 
         getCartbyId = async (cartId) => {
                 let result = await cartsModel.find({ _id: cartId });
-                console.log(result);
         return result;
         };
 
@@ -41,6 +40,16 @@ export default class Carts {
                         { _id: cartId },
                         { $pull: { products: { product: productId } } }
                 );
+                return result;
+        };
+
+        delateProductsFromCart = async (productId) => {
+                let result = await cartsModel.find({ 'products.product': productId }).populate('userId', 'email first_name').populate('products.product', 'title price');
+                await cartsModel.updateMany(
+                        { 'products.product': productId },
+                        { $pull: { products: { product: productId } } }
+                );
+                
                 return result;
         };
 }

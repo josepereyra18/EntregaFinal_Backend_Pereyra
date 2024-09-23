@@ -1,4 +1,5 @@
 import express from 'express';
+import { deleteProductBack }  from './controllers/productsController.js'
 import __dirname from './utils.js';
 import handlebars from 'express-handlebars';
 import viewsRouter from './routes/views.router.js';
@@ -6,7 +7,7 @@ import { Server } from 'socket.io';
 import dotenv from 'dotenv';
 dotenv.config();
 import productsRouter from './routes/api/products.route.js'
-import cartRouter from './routes//api/carts.route.js'
+import cartRouter from './routes/api/carts.route.js'
 import realTimeProducts from './routes/api/realTimeProducts.router.js'
 import mongoose from 'mongoose';
 import productsModel from './dao/mongo/models/products.model.js'
@@ -25,6 +26,7 @@ import ressCon from './routes/api/reesCont.js'
 import userRoute from './routes/api/users.route.js'
 import swaggerJSDoc from 'swagger-jsdoc';
 import SwaggerUiExpress from 'swagger-ui-express';
+
 
 const app = express();
 
@@ -104,7 +106,7 @@ socketServer.on('connection', async socket => {
 
     console.log('Un cliente se ha conectado');
 
-    // soket RealTimeProducts
+    //? soket RealTimeProducts
 
     async function productosActualizados (){
     const productosActualizados = await productsModel.find() ;
@@ -114,45 +116,54 @@ socketServer.on('connection', async socket => {
     const productos = await productsModel.find();
     socket.emit('Lista-Modificada', productos);
 
-    // Cuando se elimina un producto
+    //! Cuando se elimina un producto
     socket.on ('eliminarProd', async (id) => {
-        await cartModel.updateMany({ products: {_id : id}}, { $pull: { products: {_id : id} } });
-        await productsModel.deleteOne({_id: id})
+        await deleteProductBack(id);
         productosActualizados();
     })
-    // Cuando se agrega un producto
+
+    //! Cuando se agrega un producto
     socket.on('agregarProd', async (product) => {
         let productdto= new productsDto(product.title, product.description, product.price, product.code, product.stock, product.category);
         await productsModel.create(productdto);
         productosActualizados();
     })
-  // Cuando se modifica un producto
+
+  //! Cuando se modifica un producto
     socket.on('modificarProd', async (product, id) => {
         await productsModel.updateOne({_id: id}, product)
         productosActualizados();
     });
 
 
-    //socket agregar productos al carrito 
     let cart= []
     if (session && session.user && session.user.cartId) {
         let carrito
+        let productos =[]
         const cartId = session.user.cartId;
         if (session.cart === undefined){
             carrito = await cartModel.findOne({_id: cartId});
             
         }else{
             await cartModel.updateOne({_id: cartId}, {products: session.cart});
-            carrito = await cartModel.findOne({_id: cartId});
+            carrito = await cartModel.findOne({_id: cartId}).populate('products.product', 'title price');
         }
-        socket.emit('reestablecerCart', carrito.products);
+
+        for (let i = 0; i < carrito.products.length; i++){
+            let producto = await productsModel.findOne({ _id: carrito.products[i].product });
+            producto = producto.toObject(); 
+            producto.quantity = carrito.products[i].quantity;
+            productos.push(producto);
+        }
+
+        socket.emit('reestablecerCart', productos);
         socket.emit('cartId', cartId);
-    }else{
-        socket.emit('cartNoUser', cart);
+        socket.emit('cartNoUser', carrito.products);
     }
 
 
     socket.on ('agregarProducto', async (productId, cartId) => {
+        let productos =[]
         let producto = await productsModel.findOne({_id:productId});
         if (cartId === 0){
             producto.quantity = 1;
@@ -163,7 +174,13 @@ socketServer.on('connection', async socket => {
                 prod.quantity++;
             }
             session.cart = cart;
+            socket.emit('cartNoUser', cart);
+            for (let i = 0; i < carrito.products.length; i++){
+                productos = await productsModel.findOne({_id:carrito.products[i].product});
+            }
+            socket.emit('productoAgregado', productos);
         }else{
+                let productos
                 let carrito = await cartModel.findOne({_id:cartId});
                 if (await cartModel.findOne({_id: cartId , products: {$elemMatch: {product:productId}}})){
                     carrito.products.find(prod => prod.product.toString() === producto._id.toString()).quantity++;
@@ -171,9 +188,15 @@ socketServer.on('connection', async socket => {
                     carrito.products.push({product:productId , quantity: 1});
                 }
                 await cartModel.updateOne({_id:cartId}, carrito);
+                for (let i = 0; i < carrito.products.length; i++){
+                    productos = await productsModel.findOne({_id:carrito.products[i].product});
+                }
+                socket.emit('cartNoUser', cart);
+                socket.emit('productoAgregado', productos );
             }
-        socket.emit('productoAgregado', producto);
-        socket.emit('cartNoUser', cart);
+        
+        
+        
     })
     
 })

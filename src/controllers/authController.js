@@ -12,13 +12,6 @@ class AuthController {
                 console.log("El usuario ya existe");
                 return done(null, false);
             }
-            console.log(`
-            first_name: ${first_name}
-            last_name: ${last_name}
-            email: ${email}
-            password: ${password}
-            age: ${age}
-                `)
             let userDto = new usersDTO(first_name, last_name, email, password, age);
             let createPassword = createHash(userDto.password);
             userDto.password = createPassword
@@ -58,7 +51,6 @@ class AuthController {
 
     async githubCallback(accessToken, refreshToken, profile, done) {
         try {
-            console.log(profile);
             let user = await usersService.findUser(profile._json.email);
 
             if (!user) {

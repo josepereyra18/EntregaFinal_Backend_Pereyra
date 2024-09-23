@@ -36,5 +36,11 @@ export default class cartsRepository {
     delateproductfromCart = async (cartId, productId) => {
         let result = await this.dao.delateproductfromCart(cartId, productId);
         return result;
+
+    }
+
+    delateProductsFromCart = async (productId) => {
+        let result = await this.dao.delateProductsFromCart(productId);
+        return result;
     }
 }

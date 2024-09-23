@@ -19,7 +19,7 @@ const initializepassport = () => {
     passport.use('github', new GitHubStrategy({
         clientID: "Iv23liVLQvrMmFomDdSm",
         clientSecret: "8601951c22332cbc1f0f8926516e8ecc6318e665",
-        callbackURL: "http://localhost:8080/api/session/githubcallback"
+        callbackURL: `/api/session/githubcallback` // aca no se como conectarlo con github
     }, (accessToken, refreshToken, profile, done) => AuthController.githubCallback(accessToken, refreshToken, profile, done)));
 
     passport.serializeUser((user, done) => {

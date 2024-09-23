@@ -29,8 +29,8 @@
                     Productos
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="/?category={{encodeURIComponent 'Star Wars'}}">Star Wars</a></li>
-                    <li><a class="dropdown-item" href="/?category={{encodeURIComponent 'The Eras Tour'}}">Taylor Swift</a></li>
+                    <li><a class="dropdown-item" href="/?category={{encodeURIComponent 'STAR WARS'}}">Star Wars</a></li>
+                    <li><a class="dropdown-item" href="/?category={{encodeURIComponent 'THE ERAS TOUR'}}">Taylor Swift</a></li>
                 </ul>
                 </li>
             </ul>
@@ -46,13 +46,13 @@
                         </button>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" >Mi Perfil</a></li>
-                                <li><a class="dropdown-item" class="btn btn-outline-danger">Crear Producto</a></li>
+                                <li><a class="dropdown-item" class="btn btn-outline-danger" href="/realTimeProducts">Crear Producto</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="/api/session/logout">Cerrar Sesión</a></li>
                             </ul>
                         </div>
                     {{else}}
-                        <div class="btn-group dropstart"></div>
+                        <div class="btn-group dropstart">
                             <button class="btn  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="display: flex; justify-content:center; align-items: center;">
                                 <span class="material-icons" style="color: rgb(255, 255, 255);">account_circle</span>
                             </button>
@@ -67,26 +67,25 @@
                     <a class="btn  btn-sm btn-outline-success me-2" href="/api/session/login" type="button"> Login </a>
                     <a class="btn btn-sm btn-outline-secondary" href="/api/session/register" type="button">Register</a>
                 {{/if}}
-                
             </div>
-        </div>
-        <button class="btn btn-sm btn-outline-secondary " type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" style="display: flex; margin-left: 10px;">
-            <p id="cartItem" calss="cartItem" style="margin: 0px; color: rgb(224, 224, 224); padding-right: 5px;"></p>
-            <span class="material-icons" style="color: rgb(255, 255, 255);"> shopping_cart</span>
-        </button>
+                <button class="btn btn-sm btn-outline-secondary " type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" style="display: flex; margin-left: 10px;">   
+                        <p id="cartItem" calss="cartItem" style="margin: 0px; color: rgb(224, 224, 224); padding-right: 5px;"></p>
+                        <span class="material-icons" style="color: rgb(255, 255, 255);"> shopping_cart</span>
+                </button>
 
-        <div class="offcanvas offcanvas-start bg-dark" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title offCanvasStyle" id="offcanvasExampleLabel">Offcanvas</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <div class="offCanvasStyle" id="cart" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-            </div>
-            
-            <div id="pago-container">
-                
-            </div>
+                        <div class="offcanvas offcanvas-start bg-dark" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                        <div class="offcanvas-header">
+                            <h5 class="offcanvas-title offCanvasStyle" id="offcanvasExampleLabel">Offcanvas</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                            <div class="offCanvasStyle" id="cart" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                
+                            </div>
+                            <div id="pago-container">
+                                
+                            </div>
+                        </div>
         </div>
     </nav>
 </header>

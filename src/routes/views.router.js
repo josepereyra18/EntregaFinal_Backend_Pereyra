@@ -1,10 +1,11 @@
 import express from 'express';
 const router = express.Router();
 import { isAuthenticated, isNotAuthenticated } from '../middlewares/auth.js';
+import { isAdmin } from '../middlewares/isAdmin.js';
 import productsModel from '../dao/mongo/models/products.model.js';
 
 router.get('/purchase',isAuthenticated, (req, res) => {
-    res.render('ProcesoDePago')
+    res.render('ProcesoDePago',{ user: req.user })
 })
 
 router.get('/api/session/login',(req, res) => {
@@ -19,7 +20,7 @@ router.get('/reestablecimientoCont/verificado', (req, res) => {
     res.render('resCont')
 })
 
-router.get('/idem', (req, res) => {
+router.get('/AdminMod', isAdmin,(req, res) => {
     res.render('deleteModifyUser')
 })
 
@@ -59,8 +60,6 @@ router.get('/', async(req, res) => {
         if (page > result.totalPages) {
             return res.status(404).send('Página no encontrada');
         }
-
-        console.log(req.session.user);
 
         if (req.session.user != undefined ) {
             return res.render('home', { productos: result.docs, user: req.session.user, isAdmin: req.session.user.isAdmin });
