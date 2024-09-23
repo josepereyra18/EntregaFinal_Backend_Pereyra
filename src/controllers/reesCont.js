@@ -9,6 +9,7 @@ export const lalala = async (req, res) => {
 
 export const verificacionMail = async (req, res) => {
     const {email} = req.body;
+    const {url} = req.body
     try{
         let UserExist = await usersService.findUser(email);
         if (!UserExist){
@@ -34,7 +35,7 @@ export const verificacionMail = async (req, res) => {
             <div>
                 <h1> ${UserExist.first_name}, Hemos recibido uintento de cambio de contraseña \n </h1>
                 <h3> Has click en el link de abajo para poder reestablecer tu contraseña \n En caso de que no hayas hecho tal petición, te pedimos que ignores ste mensaje. </h3>
-                <a method="post" href="/reestablecimientoCont/verificado/${token}"> Click aquí para reestablecer tu contraseña </a>
+                <a method="post" href="${url}/reestablecimientoCont/verificado/${token}"> Click aquí para reestablecer tu contraseña </a>
                 </div>
             `,
         })
